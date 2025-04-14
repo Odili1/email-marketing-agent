@@ -1,9 +1,14 @@
 import winston from 'winston';
+// import { ConfigService } from '@nestjs/config';
 
 const logFormat = winston.format.combine(
+  winston.format.colorize(),
   winston.format.timestamp(),
   winston.format.json(),
   winston.format.prettyPrint(),
+  winston.format.printf(
+    ({ timestamp, level, message }) => `${timestamp} [${level}]: ${message}`,
+  ),
 );
 
 const logger = winston.createLogger({
@@ -15,5 +20,23 @@ const logger = winston.createLogger({
     // new winston.transports.File({ filename: 'logs/combined.log' }),
   ],
 });
+
+// const logger: Logger = winston.createLogger({
+//   level: 'info',
+//   format: winston.format.combine(
+//     winston.format.colorize(),
+//     winston.format.timestamp(),
+//     winston.format.printf(
+//       ({ timestamp, level, message }) => `${timestamp} [${level}]: ${message}`,
+//     ),
+//   ),
+//   transports: [
+//     new winston.transports.Console({ level: configService.LOG_LEVEL }),
+//     new winston.transports.File({
+//       filename: configService.LOG_FILE_PATH,
+//       level: configService.LOG_LEVEL,
+//     }),
+//   ],
+// });
 
 export default logger;
